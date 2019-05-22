@@ -1,6 +1,11 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Week 1 Challenge: Charlottesville Restaurants
 
-## Available Scripts
+This project provides a list of currently open restaurants and bars in the charlottesville area.
+The list also provides restaurant ratines, price levels, and addresses.
+The list is accompanies by an interactive map detailing the location of the lsited restaurants.
+
+
+# Usage, Once Installed:  Available Scripts
 
 In the project directory, you can run:
 
@@ -66,3 +71,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+# Credits
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
