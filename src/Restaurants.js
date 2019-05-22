@@ -3,12 +3,12 @@ import './App.css';
 import axios from 'axios';
 import Map from './Map_new.js';
 
-const api_key = process.env.REACT_APP_API_KEY; //API key is hidden
+const api_key = process.env.REACT_APP_API_KEY //API key is hidden
 
 class Restaurants extends React.Component {
   state={
     restaurants : [],
-    //sort_by_rating: false;
+    sort_by_rating: false,
   }
 
   componentDidMount(){ 
@@ -47,20 +47,21 @@ class Restaurants extends React.Component {
     )
   }
 
-  /*
+  
+  
   ratingSort = () =>{
       this.setState( {sort_by_rating: true} );
-
+    
   }
-  <button onClick> sort by rating </button>
-*/
+  
+
   render(){
     return (
       <div className="App">
           <b > Charlottesville Restaurants </b>
-          
-          {this.mapItems()}
-          { (this.state.restaurants.length != 0) ? <Map data={this.state.restaurants}/> : null }
+          <button onClick={this.ratingSort}> sort by rating </button>
+          { this.state.sort_by_rating ? this.mapItems() : null}
+          { this.state.sort_by_rating && (this.state.restaurants.length != 0) ? <Map data={this.state.restaurants}/> : null }
       </div>
     );
   }
