@@ -1,8 +1,25 @@
+@import "~antd/dist/antd.css";
+
 .App {
   text-align: center;
-  background-color: #CEFCF9
+  background-color: rgba(168, 219, 202, 1)
 }
 
+h1 {
+  color: rgb(37, 37, 37);
+  font-family: Verdana;
+}
+
+p{
+  font-size: 10px;
+}
+
+.imageStyling{
+  height: auto;
+  width: 100px;
+  padding-right: 15px;
+  padding-left: 15px; 
+}
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;

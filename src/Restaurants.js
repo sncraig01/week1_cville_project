@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import axios from 'axios';
 import Map from './Map_new.js';
+import {Button, Card} from 'antd';
+import { Row, Col, Affix } from 'antd';
 
 const api_key = process.env.REACT_APP_API_KEY //API key is hidden
 
@@ -9,10 +11,13 @@ class Restaurants extends React.Component {
   state={
     restaurants : [],
     sort_by_rating: false,
+    sort_by_price: false,
+
+    top: 10, // for ant design affix
   }
 
   componentDidMount(){ 
-    let URL = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=38.0293,-78.4767&radius=1500&type=restaurant&opennow&key=' + api_key;
+    let URL = 'https://cors-anywhere-hclaunch.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=38.0293,-78.4767&radius=1500&type=restaurant&opennow&key=' + api_key;
 
     axios.get( URL ).then(
       (result) => {
@@ -36,36 +41,61 @@ class Restaurants extends React.Component {
 
   mapItems(){
     return this.state.restaurants.map( 
-      (item) => {
-        return <div> 
-           <li align='left' style={{color: 'blue'}}> {item.name}</li>
-           <div align="left"> _____ Rating: {item.rating} </div>
-           <div align="left"> _____ Price level: {item.price}</div> 
-           <div align="left"> _____ Location: {item.address}</div> 
-        </div>
+      (item) => {;
+        return  <Card size="small" title={item.name} style={{ width: 375 }}>
+        <p>Rating: {item.rating}</p>
+        <p>Price Level: {item.price}</p>
+        <p>Location: {item.address}</p>
+      </Card>
       }
     )
   }
 
-  
-  
-  ratingSort = () =>{
+  //sort this.state.restaurants by rating
+  ratingSort = () =>{ 
       this.setState( {sort_by_rating: true} );
-    
+
+      let rests_toSort = this.state.restaurants;
+      rests_toSort.sort((a,b) => (a.rating > b.rating) ? -1 : ((b.rating > a.rating) ? 1 : 0));  //sort them by RATE
+
+      this.setState( {restaurants: rests_toSort});
   }
   
+  //sort this.state.restaurants by price
+  priceSort=()=>{
+      this.setState( {sort_by_price: true });
+
+      let rests_toSort = this.state.restaurants;
+      rests_toSort.sort((a,b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0));  //sort them by PRICE 
+
+      this.setState( {restaurants: rests_toSort});
+  }
 
   render(){
     return (
       <div className="App">
-          <b > Charlottesville Restaurants </b>
-          <button onClick={this.ratingSort}> sort by rating </button>
-          { this.state.sort_by_rating ? this.mapItems() : null}
-          { this.state.sort_by_rating && (this.state.restaurants.length != 0) ? <Map data={this.state.restaurants}/> : null }
+          <div> 
+            <Button type="danger" size="small" onClick={this.ratingSort}> Sort by Rating </Button>
+            <Button type="danger" size="small" onClick={this.priceSort}> Sort by Price </Button>
+          </div> 
+        <br/>
+        <div align="center">
+            <Row>
+            <Col span={12}>  
+                { this.mapItems() } 
+            </Col>
+            <Col span={12}> 
+                <Affix offsetTop={this.state.top}>
+                {  (this.state.restaurants.length !== 0) ? 
+                    <Map data={this.state.restaurants}/> : null } 
+                </Affix>
+            </Col>
+            </Row>
+
+        </div>
       </div>
     );
   }
 
 }
-
 export default Restaurants;
