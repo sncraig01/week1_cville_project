@@ -5,7 +5,7 @@ import Map from './Map_new.js';
 import {Button, Card} from 'antd';
 import { Row, Col, Affix } from 'antd';
 
-const api_key = process.env.REACT_APP_API_KEY //API key is hidden
+//const api_key = process.env.REACT_APP_API_KEY //API key is hidden IN THE BACKEND NOW
 
 class Restaurants extends React.Component {
   state={
@@ -17,26 +17,12 @@ class Restaurants extends React.Component {
   }
 
   componentDidMount(){ 
-    let URL = 'https://cors-anywhere-hclaunch.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=38.0293,-78.4767&radius=1500&type=restaurant&opennow&key=' + api_key;
-
-    axios.get( URL ).then(
-      (result) => {
-        console.log( result )
-        let array = [];
-        for( let i=0; i < result.data.results.length; i++ ){
-          array.push( {
-            name: result.data.results[i].name,
-            rating: result.data.results[i].rating,
-            price: result.data.results[i].price_level,
-            address: result.data.results[i].vicinity,
-            long: result.data.results[i].geometry.location.lng,
-            lat: result.data.results[i].geometry.location.lat,
-          })
-        }
-        this.setState( {restaurants: array} );
-
-      }
-    )
+    //access backend for /cvillerecs
+    axios.get("/cvillerecs")
+       .then(res => {
+            console.log( res );
+            this.setState({ restaurants: res.data }) 
+        })
   }
 
   mapItems(){
@@ -66,7 +52,8 @@ class Restaurants extends React.Component {
       this.setState( {sort_by_price: true });
 
       let rests_toSort = this.state.restaurants;
-      rests_toSort.sort((a,b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0));  //sort them by PRICE 
+      rests_toSort.sort((a,b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : (a.price === "no price" ) ? -1 : 0)) //sort them by PRICE 
+
 
       this.setState( {restaurants: rests_toSort});
   }
@@ -74,10 +61,10 @@ class Restaurants extends React.Component {
   render(){
     return (
       <div className="App">
-          <div> 
+        <div> 
             <Button type="danger" size="small" onClick={this.ratingSort}> Sort by Rating </Button>
             <Button type="danger" size="small" onClick={this.priceSort}> Sort by Price </Button>
-          </div> 
+        </div>
         <br/>
         <div align="center">
             <Row>
