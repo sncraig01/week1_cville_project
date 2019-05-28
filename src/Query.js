@@ -84,20 +84,13 @@ class Query extends React.Component{
     searchGeocodeAPI = () => {
             let formatted_query = this.state.number + "+" + this.state.street + "+" + this.state.streetType + ",+" +
             this.state.town + ",+" + this.state.state;
-    
             console.log(formatted_query);
 
-            let found_lat = 0; //to be modified by the axios.get request for geocoding
-            let found_long = 0;
-
-            let geocode_url = 'https://cors-anywhere-hclaunch.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=' + formatted_query + "&key=" + api_key;
-            axios.get( geocode_url ).then(
+            //access the backend
+            axios.get( '/geocode?address=' + formatted_query ).then(
                 (result) => {
-                    console.log(result);
-                    found_lat =  result.data.results[0].geometry.location.lat;
-                    found_long = result.data.results[0].geometry.location.lng;
-        
-                    this.setState( {lat:found_lat, long:found_long});
+                    console.log(result); 
+                    this.setState( {lat: result.data[0], long: result.data[1]} );
                 }
             )
     }

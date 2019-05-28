@@ -30,27 +30,12 @@ class Query_results extends React.Component{
 
     updateAPI=()=>{
         let max_price = this.state.price_level;
+        let backend_url = '/findrecs?lat=' + this.state.latitude + "&long=" + this.state.longitude + "&maxprice=" + max_price
+            + "&key=" + this.state.keyword;
 
-        let custom_url = 'https://cors-anywhere-hclaunch.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='
-            + this.state.latitude + "," + this.state.longitude + 
-            "&radius=1500&type=restaurant&opennow&maxprice=" + max_price + 
-            '&keyword='+ this.state.keyword + '&key=' + api_key;
-        axios.get( custom_url ).then(
+        axios.get(  backend_url ).then(
             (result) => {
-                console.log( "second request" );
-                console.log( result );
-                let array = [];
-                for( let i=0; i < result.data.results.length; i++ ){
-                    array.push( {
-                        name: result.data.results[i].name,
-                        rating: result.data.results[i].rating,
-                        price: result.data.results[i].price_level,
-                        address: result.data.results[i].vicinity,
-                        long: result.data.results[i].geometry.location.lng,
-                        lat: result.data.results[i].geometry.location.lat,
-                    })
-                }
-                this.setState( {results: array} );
+                this.setState( {results: result.data } );
             }
         )
     }
